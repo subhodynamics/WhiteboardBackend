@@ -5,7 +5,7 @@ router.get('/', (req, res) => {
     console.log('GET request on /register');
     // res.send('GET request on /register');
     const sampledata = {
-        message: "GET request on /register"
+        message: "Hi welcome to the register page"
     }
     res.json(sampledata);
 });

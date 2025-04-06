@@ -1,10 +1,12 @@
 const express = require('express');
 const apiRoutes = require('./routes');
 const cors = require('cors');
+const connectToDatabase = require('./routes/db');
 
 
 const app = express();
 const PORT = 3000;
+connectToDatabase();
 
 app.use(cors());
 app.use('/', apiRoutes);
