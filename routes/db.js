@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const username = 'subhadeeppathak2013'; // Replace with your database username
-const password = '3jiYvquNTmi64teg';
+const username = process.env.MONGO_USERNAME; // Replace with your database username
+const password = process.env.MONGO_PASSWORD; // Replace with your database password
 
 const connectionURL = `mongodb+srv://${username}:${password}@wbcluster1.yaqixz8.mongodb.net/?retryWrites=true&w=majority&appName=WBCluster1`;
 
