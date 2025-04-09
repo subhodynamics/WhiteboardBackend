@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const username = process.env.MONGO_USERNAME; // Replace with your database username
-const password = process.env.MONGO_PASSWORD; // Replace with your database password
+const username = process.env.MONGO_USERNAME;
+const password = process.env.MONGO_PASSWORD;
+const cluster = process.env.MONGO_CLUSTER;
+const clusterName = process.env.MONGO_CLUSTER_NAME;
+const connectionURL = `mongodb+srv://${username}:${password}@${cluster}/?retryWrites=true&w=majority&appName=${clusterName}`;;
 
-const connectionURL = `mongodb+srv://${username}:${password}@wbcluster1.yaqixz8.mongodb.net/?retryWrites=true&w=majority&appName=WBCluster1`;
 
 const connectionParams = {
     useNewUrlParser: true,
