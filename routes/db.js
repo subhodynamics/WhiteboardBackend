@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const username = process.env.MONGO_USERNAME;
-const password = process.env.MONGO_PASSWORD;
-const cluster = process.env.MONGO_CLUSTER;
-const clusterName = process.env.MONGO_CLUSTER_NAME;
-const connectionURL = `mongodb+srv://${username}:${password}@${cluster}/?retryWrites=true&w=majority&appName=${clusterName}`;;
+const connectionURL = process.env.MONGO_URI;
 
 
 const connectionParams = {
