@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const validator = require('validator');
+const { validate } = require('./postModel');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -12,13 +14,26 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        lowercase: true
+        lowercase: true,
+        validate: {
+            validator: validator.isEmail,
+            message: 'Please enter a valid email address'
+        }
     },
     password: {
         type: String,
-        unique: true,
         required: true,
-        minLength: 8
+        minLength: 8,
+        validate: {
+            validator: (value) => validator.isStrongPassword(value, {
+                minLength: 8,
+                minLowercase: 1,
+                minUppercase: 1,
+                minNumbers: 1,
+                minSymbols: 1
+            }),
+            message: 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one symbol'
+        }
     },
     age: {
         type: Number,
