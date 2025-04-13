@@ -9,6 +9,7 @@ const PORT = 3000;
 connectToDatabase();
 
 app.use(cors());
+app.use(express.json());
 app.use('/', apiRoutes);
 
 app.listen(PORT, () => {

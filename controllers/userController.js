@@ -1,11 +1,15 @@
 const User = require('../models/userModel');
 
-const addUser = async (req, res) => {
+const registerUser = async (req, res) => {
     try {
-        const newUser = new User (req.body);
-        const saveUser = await newUser.save();
-        res.status(201).json(saveUser);
-    } catch (erorr) {
+        const newUser = await User.create(req.body);
+        const {password, ...userWithoutPassword} = newUser.toObject();
+        res.status(201).json({
+            message: 'User registered successfully',
+            user: userWithoutPassword
+        });
+    }   catch (error) {
+        console.error('Error registering user:', error);d
         res.status(400).json({error: error.message});
     }
 };
@@ -19,4 +23,4 @@ const getUsers = async (req, res) => {
     }
 };
 
-module.exports = { addUser, getUsers };
+module.exports = { registerUser, getUsers };

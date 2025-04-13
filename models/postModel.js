@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// DB Schema for posts
 const postsSchema = new mongoose.Schema({
     title : {
         type: String,
@@ -19,10 +20,11 @@ const postsSchema = new mongoose.Schema({
 },
 {
     timestamps: true,
-    collection: 'test'
+    collection: 'new_collection'
 });
 
-postsSchema.statics.ceatePost = async function(title, content) {
+// static methods exposed to the controller
+postsSchema.statics.createPost = async function(title, content) {
     try {
         const post = new this({
             title,
@@ -45,3 +47,6 @@ postsSchema.statics.getPosts = async function() {
         throw new Error('Error fetching posts: ' + error.message);
     }
 } 
+
+const Posts = mongoose.model('Posts', postsSchema);
+module.exports = Posts;
