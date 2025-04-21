@@ -2,6 +2,7 @@ require('dotenv').config();
 const User = require('../models/userModel');
 const JWT_SECRET = process.env.JWT_SECRET;
 const jwt = require('jsonwebtoken');
+const protectRoute = require('../middleware/protectRoute');
 
 const registerUser = async (req, res) => {
     try {
@@ -43,7 +44,7 @@ const loginUser = async (req, res) => {
         }
         
         // generate a JWT Token
-        const token = jwt.sign({ id: user._id }, JWT_SECRET, {
+        const token = jwt.sign({ id: user._id, name: user.name }, JWT_SECRET, {
             expiresIn: '1h'
         });
 
@@ -62,4 +63,41 @@ const loginUser = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
-module.exports = { registerUser, getUsers, loginUser };
+
+const getUserProfile = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ message: 'Unauthorized access' });
+        }
+        const token = authHeader.split(' ')[1];
+
+        // validate the token
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (!decoded || !decoded.email) {
+            return res.status(401).json({ message: 'Unauthorized access' });
+        }
+
+        // get the user's profile
+        const user = await userModel.getUser(decoded.email);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' }); 
+        }
+
+        return res.status(200).json({
+            message: 'User profile fetched successfully',
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                age: user.age
+            }
+        });
+    }
+    catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+module.exports = { registerUser, getUsers, loginUser, getUserProfile };
